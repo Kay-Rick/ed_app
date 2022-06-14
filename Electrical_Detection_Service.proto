@@ -1,0 +1,42 @@
+syntax="proto3";
+//protoc Electrical_Detection_Service.proto --cpp_out=./ --proto_path=./
+//srpc_generator protobuf ./Electrical_Detection_Service.proto ./
+message Target_Recognition_Request{
+    bytes data = 1;//由分选元服务得到的“辐射源检测报告
+    float RF_Freq_min = 2;//扫频范围上限
+    float RF_Freq_max = 3;//扫频范围下限
+    uint32 dataSize = 4;//本次传递的数据大小
+}
+
+message Target_Recognition_Response{ 
+    uint32 isResult = 1;//本次是否返回结果
+    uint32 Signal_number = 2;//辐射源编号
+    repeated uint32 Serial_number = 3;//型号对应库
+    repeated string possible_models = 4;//候选型号名称
+    repeated float Confidence = 5;//对应置信度（0~1），精度0.001
+}
+
+message Target_Location_Request{
+    bytes data = 1;//由分选元应用得到的“辐射源检测报告
+    float RF_Freq_min = 2;//扫频范围上限
+    float RF_Freq_max = 3;//扫频范围下限
+    uint32 dataSize = 4;//本次传递的数据大小
+}
+
+message Target_Location_Response{
+    uint32 isResult = 1;//本次是否返回结果
+    uint32 Signal_number = 2;//辐射源编号
+    float  longitude = 3;//经度  度 
+    float  latitude = 4;//纬度 度
+}
+
+//电侦定位服务   调用西电接口 王凌霄具体实现
+service  Electrical_Detecion_service{
+    
+    
+    rpc target_recognition(Target_Recognition_Request) returns(Target_Recognition_Response);
+
+   
+    rpc target_location(Target_Location_Request) returns(Target_Location_Response);
+};
+

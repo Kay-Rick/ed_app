@@ -1,0 +1,41 @@
+syntax="proto3";
+//相比版本123增加了获取重构时间接口
+//protoc ed_application.proto --cpp_out=./ --proto_path=./
+//srpc_generator protobuf ./ed_application.proto ./
+message Detector_Open_Request{
+    float RF_Freq_min = 2;//扫频范围上限
+    float RF_Freq_max = 3;//扫频范围下限
+};
+
+message Detector_Open_Response{
+    uint32 Signal_number = 1;//辐射源编号
+    repeated uint32 Serial_number = 2;//型号对应库
+    repeated string possible_models = 3;//候选型号名称
+    repeated float Confidence = 4;//对应置信度（0~1），精度0.001
+    float  longitude = 5;//经度  度 
+    float  latitude = 6;//纬度 度
+};
+message Detector_Close_Request{
+};
+message Detector_Close_Response{
+};
+message ED_ReconstructTime_Request{
+};
+message ED_ReconstructTime_Response{
+    uint32 task1 = 1;//任务类型
+    uint32 task2 = 2;//切换任务类型
+    uint32 hardwareid = 3;//硬件id,扩展用
+    float timelen = 4;//重构时间
+    float param1 = 5;//扩展用
+    float param2 = 6;//扩展用
+};
+
+//电侦应用 对外提供接口，服务实现在本地 sh李老师
+service  ElectricalDetector{
+    
+    rpc Detector_Open_Interface(Detector_Open_Request) returns(Detector_Open_Response);
+    rpc Detector_Close_Interface(Detector_Close_Request) returns (Detector_Close_Response);
+    rpc get_reconstruct_time(ED_ReconstructTime_Request) returns(ED_ReconstructTime_Response);
+};
+
+

@@ -1,0 +1,6 @@
+*.o
+.DS_Store
+.vscode/
+.idea/
+log.txt
+log_clinet.txt
